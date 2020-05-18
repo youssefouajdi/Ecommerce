@@ -2,13 +2,29 @@
 @section('extra-meta')
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
-@section('content')
 <script>
 
-
+function showData(){
+ 
+ var date=document.getElementById("datedebut").value;
+ var number1=document.getElementById("qty").value;   
+ 
+ if((date !== "") && (number1 !== "")){
+  console.log(number1);
+   var date_diff_indays = function(date, date2) {
+    const d = new Date(Number(date));
+    d.setDate(date.getDate() + date2);
+     console.log(d);
+     //console.log( Math.floor((Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) - Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate()) ) /(1000 * 60 * 60 * 24)));
+      } 
+      document.getElementById("datefin").value = "2014-02-09";
+      date_diff_indays(date, number1);
+    }
+   }
     </script>
 
 
+@section('content')
     @if(Cart::count()>0)
     <div class="px-4 px-lg-0">
 
@@ -28,13 +44,13 @@
                   <div class="py-2 text-uppercase">Prix</div>
                 </th>
                 <th scope="col" class="border-0 bg-light">
+                  <div class="py-2 text-uppercase">Jour</div>
+                </th>
+                <th scope="col" class="border-0 bg-light">
                   <div class="py-2 text-uppercase">Debut Reservation</div>
                 </th>
                 <th scope="col" class="border-0 bg-light">
                   <div class="py-2 text-uppercase">Fin Reservation</div>
-                </th>
-                <th scope="col" class="border-0 bg-light">
-                  <div class="py-2 text-uppercase">Jour</div>
                 </th>
                 <th scope="col" class="border-0 bg-light">
                   <div class="py-2 text-uppercase">Supprimer</div>
@@ -53,8 +69,6 @@
                   </div>
                 </th>
                 <td class="border-0 align-middle"><strong>{{ getPrice($product->subtotal()) }}</strong></td>
-                <td class="border-0 align-middle"><strong>  <input type="date" id="datedebut" name="Datdebut" onchange="showData()"></strong></td>
-                <td class="border-0 align-middle"><strong>  <input type="date" id="datefin" name="Datfin" onchange="showData()"></strong></td>
                 <td class="border-0 align-middle" ><strong>
 
                 <select name="qty" id="qty"  data-id="{{ $product->rowId }}" class="custom-select" >
@@ -65,6 +79,9 @@
                     @endfor
                 </select>
                 </strong></td>
+                <td class="border-0 align-middle"><strong>  <input type="date" id="datedebut" name="Datdebut" onchange="showData()"></strong></td>
+                <td class="border-0 align-middle"><strong>  <input type="date" id="datefin" name="Datfin" disabled></strong></td>
+                
                 <td class="border-0 align-middle">
                     <form action ="{{ route('cart.destroy', $product->rowId )}}" method="POST">
                         @csrf
@@ -124,21 +141,7 @@
     @endsection
     @section('extra-js')
     <script>
-    function showData(){
- 
- var number=document.getElementById("datedebut").value;
- var number1=document.getElementById("datefin").value;   
- if((number !== "") && (number1 !== "")){
-   
-   var date_diff_indays = function(date1, date2) {
-     dt1 = new Date(date1);
-     dt2 = new Date(date2);
-     return Math.floor((Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) - Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate()) ) /(1000 * 60 * 60 * 24));
-   }
-   
-   if(date_diff_indays(number, number1)>0){
-     let element = document.getElementById("qty");
-     element.value  =date_diff_indays(number, number1);
+let element = document.getElementById("qty");
      var selects= document.querySelectorAll('#qty');
       Array.from(selects).forEach((element)=>{
         console.log(element);
@@ -163,18 +166,12 @@
           ).then((data)=>{
             console.log(data);
             location.reload();
+            showData();
           }).catch((error)=>{
             console.log(error);
           })
         });
       });
-    }else{
-       element.value = valueToSelect ="0";
-   
-   }
-   }
 
-      
-    }
     </script>
 @endsection
