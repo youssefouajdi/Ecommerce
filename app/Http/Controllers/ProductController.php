@@ -7,8 +7,16 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    
     public function index(){
-        $products = Prod::inRandomOrder()->take(6)->get();
+        if(request()->categorie){
+            $products=Prod::with('categories')->whereHas('categories',function
+            ($query){
+               $query->where('slug',request()->categorie);
+           })->paginate(6);
+        }else{
+        $products = Prod::with('categories')->paginate(6);
+    }
         return view('index')->with('products',$products);
     }
     public function show($slug)

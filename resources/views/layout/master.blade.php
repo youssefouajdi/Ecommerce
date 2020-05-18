@@ -7,7 +7,10 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v3.8.6">
+    @yield('extra-meta')
     <title>Acceuil</title>
+    @yield('extra-script')
+    
     
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/blog/">
@@ -162,7 +165,7 @@ h1, h2, h3, h4, h5, h6 {
   <header class="blog-header py-3">
     <div class="row flex-nowrap justify-content-between align-items-center">
       <div class="col-4 pt-1">
-        <a class="text-muted" href="{{ route('cart.index') }}">Panier <span class="badge badge-pill badge-dark">{{ Cart::count() }}</span></a>
+        <a class="text-muted" href="{{ route('cart.index') }}">Panier de resevation de <span class="badge badge-pill badge-dark">{{ Cart::count() }}</span> Jour</a>
       </div>
       <div class="col-4 text-center">
         <a class="blog-header-logo text-dark" href="{{ route('index') }}">Site de Location</a>
@@ -208,15 +211,9 @@ h1, h2, h3, h4, h5, h6 {
 
   <div class="nav-scroller py-1 mb-2">
     <nav class="nav d-flex justify-content-between">
-      <a class="p-2 text-muted" href="#">SuperMarche</a>
-      <a class="p-2 text-muted" href="#">Maison Bureau</a>
-      <a class="p-2 text-muted" href="#">Beate & Sante</a>
-      <a class="p-2 text-muted" href="#">Sport et Loisir</a>
-      <a class="p-2 text-muted" href="#">Tv & Electronique</a>
-      <a class="p-2 text-muted" href="#">Informatique</a>
-      <a class="p-2 text-muted" href="#">Vetement & Chaussure</a>
-      <a class="p-2 text-muted" href="#">Telephone & tablette</a>
-      <a class="p-2 text-muted" href="#">Autre 
+    @foreach(App\Category::all() as $category)
+      <a class="p-2 text-muted" href="{{ route('index',['categorie'=>$category->slug]) }}">{{ $category->name }}</a>
+    @endforeach
       </a>
     </nav>
   </div>
@@ -247,5 +244,6 @@ h1, h2, h3, h4, h5, h6 {
     <a href="#">Allez en Haut</a>
   </p>
 </footer>
+@yield('extra-js')
 </body>
 </html>

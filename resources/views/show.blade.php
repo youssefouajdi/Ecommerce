@@ -9,15 +9,17 @@
           <h5 class="mb-0">{{ $product->title }}</h5>
           <div class="mb-1 text-muted">{{ $product->created_at->format('d/m/Y') }}</div>
           <p class="mb-auto">{{ $product->description }}</p>
-          <strong class="mb-auto">{{ $product->getPrice() }}</strong>
-           <form action ="{{ route ('cart.store') }}" method ="POST">
+          <strong class="mb-auto">{{ $product->getPrice() }} /Jour</strong>
+           <form action ="{{ route('cart.store') }}" method ="POST">
            @csrf
             <input type="hidden" name="product_id" value="{{ $product->id }}">
+        
                 <button type="submit" class="btn btn-dark">Ajouter au panier </button>
            </form>        
         </div>
         <div class="col-auto d-none d-lg-block">
         <img src="{{ $product->image }}" alt="">
+     
             </div>
     </div>
       </div>

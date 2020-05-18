@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 use App\Prod;
+use Illuminate\Support\Facades\Session;
+
 class CartController extends Controller
 {
     /**
@@ -34,22 +36,12 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->id,$request->title,1,$request->price);
-        
-        $duplicata=Cart::search(function ($cartItem, $rowId) use($request){
-            return $cartItem->id=$request->product_id;
-        });
-        if($duplicata->isNotEmpty()){
-            $success="Le produit a deja ete ajoute";
-            return redirect()->route('index')->with(compact('success'));
-            
-        }else{
         $produit=Prod::find($request->product_id);
         Cart::add($produit->id,$produit->title,1,$produit->price)
             ->associate('App\Prod');
             $success="Le produit a bien ete ajoute";
         return redirect()->route('index')->with(compact('success'));
-        }
+        
     }
 
     /**
@@ -81,9 +73,12 @@ class CartController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $rowId)
     {
-        //
+        $data=$request->json()->all();
+        Cart::update($rowId,$data['qty']);
+        Session::flash('success','La quantite du produit est passee a '.$data['qty'].'.');
+        return  response()->json(['success'=>'Cart quantity has been updated']);
     }
 
     /**

@@ -1,5 +1,14 @@
 @extends('layout.master')
+@section('extra-meta')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+@endsection
 @section('content')
+<script>
+
+
+    </script>
+
+
     @if(Cart::count()>0)
     <div class="px-4 px-lg-0">
 
@@ -19,7 +28,13 @@
                   <div class="py-2 text-uppercase">Prix</div>
                 </th>
                 <th scope="col" class="border-0 bg-light">
-                  <div class="py-2 text-uppercase">Quantite</div>
+                  <div class="py-2 text-uppercase">Debut Reservation</div>
+                </th>
+                <th scope="col" class="border-0 bg-light">
+                  <div class="py-2 text-uppercase">Fin Reservation</div>
+                </th>
+                <th scope="col" class="border-0 bg-light">
+                  <div class="py-2 text-uppercase">Jour</div>
                 </th>
                 <th scope="col" class="border-0 bg-light">
                   <div class="py-2 text-uppercase">Supprimer</div>
@@ -37,8 +52,19 @@
                     </div>
                   </div>
                 </th>
-                <td class="border-0 align-middle"><strong>{{ $product->model->getPrice() }}</strong></td>
-                <td class="border-0 align-middle"><strong>1</strong></td>
+                <td class="border-0 align-middle"><strong>{{ getPrice($product->subtotal()) }}</strong></td>
+                <td class="border-0 align-middle"><strong>  <input type="date" id="datedebut" name="Datdebut" onchange="showData()"></strong></td>
+                <td class="border-0 align-middle"><strong>  <input type="date" id="datefin" name="Datfin" onchange="showData()"></strong></td>
+                <td class="border-0 align-middle" ><strong>
+
+                <select name="qty" id="qty"  data-id="{{ $product->rowId }}" class="custom-select" >
+                <?php 
+                $a=$product->qty; ?>
+                    @for($i=1 ; $i<100 ; $i++)
+                      <option id ="qty1" value="{{ $i }}" {{ $i==$a ? 'selected' : '' }} >{{ $i }}</option>
+                    @endfor
+                </select>
+                </strong></td>
                 <td class="border-0 align-middle">
                     <form action ="{{ route('cart.destroy', $product->rowId )}}" method="POST">
                         @csrf
@@ -82,9 +108,9 @@
             <!--<li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Shipping and handling</strong><strong>$10.00</strong></li>-->
             <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Tax</strong><strong>{{ getPrice(Cart::tax()) }}</strong></li>
             <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Total</strong>
-              <h5 class="font-weight-bold">{{ getPrice(Cart::total() )}}</h5>
+              <h5 class="font-weight-bold">{{ getPrice(Cart::total()) }}</h5>
             </li>
-          </ul><a href="#" class="btn btn-dark rounded-pill py-2 btn-block">Valider le payement</a>
+          </ul><a href="{{ route('checkout.index') }}" class="btn btn-dark rounded-pill py-2 btn-block">Valider le payement</a>
         </div>
       </div>
     </div>
@@ -95,4 +121,60 @@
     @else
     <div class="col-md-12"><p>votre panier est vide.</p> </div>
     @endif
+    @endsection
+    @section('extra-js')
+    <script>
+    function showData(){
+ 
+ var number=document.getElementById("datedebut").value;
+ var number1=document.getElementById("datefin").value;   
+ if((number !== "") && (number1 !== "")){
+   
+   var date_diff_indays = function(date1, date2) {
+     dt1 = new Date(date1);
+     dt2 = new Date(date2);
+     return Math.floor((Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) - Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate()) ) /(1000 * 60 * 60 * 24));
+   }
+   
+   if(date_diff_indays(number, number1)>0){
+     let element = document.getElementById("qty");
+     element.value  =date_diff_indays(number, number1);
+     var selects= document.querySelectorAll('#qty');
+      Array.from(selects).forEach((element)=>{
+        console.log(element);
+        element.addEventListener('change',function(){
+          var rowId=this.getAttribute('data-id');
+          var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+          var url=`/panier/${rowId}`;
+          console.log(url);
+          fetch(
+            url,{
+                        headers:{
+                            "Content-Type": "application /json",
+                            "Accept":"application/json, text-plain ,*/*",
+                            "X-Requested-With":"XMLHttpRequest",
+                            "X-CSRF-TOKEN":token
+                        },
+                        method: "PATCH",
+              body:JSON.stringify({
+                qty: this.value
+              })
+            }
+          ).then((data)=>{
+            console.log(data);
+            location.reload();
+          }).catch((error)=>{
+            console.log(error);
+          })
+        });
+      });
+    }else{
+       element.value = valueToSelect ="0";
+   
+   }
+   }
+
+      
+    }
+    </script>
 @endsection
