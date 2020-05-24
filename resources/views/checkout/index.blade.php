@@ -88,9 +88,9 @@
                     }
                 ).then((data)=>{
                     console.log(data);
-                    //window.location.href=redirect;
+                    window.location.href=redirect;
                 }).catch((error)=>{
-                    console.log("bonjour") 
+                    console.log("bonjour") ;
                 })  
                         
             }

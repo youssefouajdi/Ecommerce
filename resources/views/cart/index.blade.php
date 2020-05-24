@@ -22,8 +22,11 @@ function showData(){
     }
    }
     </script>
-
-
+ @if (session('status'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('status') }}
+                        </div>
+                    @endif
 @section('content')
     @if(Cart::count()>0)
     <div class="px-4 px-lg-0">
@@ -32,8 +35,8 @@ function showData(){
 <div class="pb-5">
   <div class="container">
     <div class="row">
-      <div class="col-lg-12 p-5 bg-white rounded shadow-sm mb-5">
-        <div class="table-responsive">
+      <div class="col-lg-12 p-2 bg-white rounded shadow-sm mb-5">
+        <div class="table-responsive  ">
           <table class="table">
             <thead>
               <tr>
@@ -54,6 +57,12 @@ function showData(){
                 </th>
                 <th scope="col" class="border-0 bg-light">
                   <div class="py-2 text-uppercase">Supprimer</div>
+                </th>
+                <th scope="col" class="border-0 bg-light">
+                  <div class="p-2 px-3 text-uppercase">Reservatoion</div>
+                </th>
+                <th scope="col" class="border-0 bg-light">
+                  <div class="p-2 px-3 text-uppercase">Etat</div>
                 </th>
               </tr>
             </thead>
@@ -89,6 +98,15 @@ function showData(){
                         <button type="submit" class="text-dark"><i class="fa fa-trash"></i></a>
                     </form>
                 </td>
+                <td class="border-0 align-middle">
+                    <form action ="{{ route('notif.index', 
+                        ['id'=>Auth::user()->id,
+                        'prod'=>$product->model->title])}}" method="POST">
+                        @csrf
+                        <button type="submit" class="text-dark"><span>Envoyez</span>
+                    </form>
+                </td>
+                <td class="border-0 align-middle"><strong>NOT OK</strong></td>
               </tr>
              @endforeach
             </tbody>
@@ -110,11 +128,11 @@ function showData(){
             </div>
           </div>
         </div>
-        <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Commentaire sur produit</div>
+        <!--<div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Commentaire sur produit</div>
         <div class="p-4">
           <p class="font-italic mb-4">Information supplementaire sur le produit</p>
           <textarea name="" cols="30" rows="2" class="form-control"></textarea>
-        </div>
+        </div>-->
       </div>
       <div class="col-lg-6">
         <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Detail de la commande </div>

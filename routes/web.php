@@ -10,14 +10,19 @@ Route::get('/boutique','ProductController@index')->name('index');
 Route::get('/boutique/{slug}','ProductController@show')->name('show');
 Route::post('/panier/ajouter','CartController@store')->name('cart.store');
 Route::patch('/panier/{rowId}','CartController@update')->name('cart.update');
-Route::get('/panier','CartController@index')->name('cart.index');
 Route::delete('/panier/{rowid}','CartController@destroy')->name('cart.destroy');
+Route::get('/search','ProductController@search')->name('products.search');
 Auth::routes();
-
+Route::group(['middleware'=>['auth']],function(){
+    Route::get('/panier','CartController@index')->name('cart.index');
+    Route::post('/notif/{id}&{produit}','NotifController@test')->name('notif.index');
+    Route::get('/paiement','CheckoutController@index')->name('checkout.index');
+    Route::post('/paiement','CheckoutController@store')->name('checkout.store');
+    Route::get('/merci', 'CheckoutController@thankyou')->name('checkout.thankyou');
+    Route::get('/annonce','AnnoncesController@ajoutannonce')->name('partenaire.annonce');
+    Route::post('/annonce/create','AnnoncesController@store')->name('partenaire.store');
+});
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/paiement','CheckoutController@index')->name('checkout.index');
-Route::post('/paiement','CheckoutController@store')->name('checkout.store');
-Route::get('/merci', 'CheckoutController@thankyou')->name('checkout.thankyou');
 
 
 /*

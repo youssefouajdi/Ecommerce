@@ -24,4 +24,14 @@ class ProductController extends Controller
         $product=Prod::where('slug',$slug)->firstOrFail();
         return view('show')->with('product',$product);
     }
+    public function search(){
+        request()->validate([
+            'q'=>'required|min:3'
+        ]);
+        $q= request()->input('q');
+        $products=Prod::where('title','like',"%$q%")
+                ->orWhere('description','like',"%$q%")
+                ->paginate(6);
+        return view('search')->with('products',$products);
+    }
 }

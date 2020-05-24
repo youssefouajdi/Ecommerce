@@ -19,7 +19,6 @@ class CheckoutController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function thankyou(){
-        dd(Session::has('success'));
         return Session::has('success')?view('checkout.thankyou'):redirect()->route('index');
     }
     public function index()
@@ -73,7 +72,7 @@ class CheckoutController extends Controller
             $i++;
         }
         $order->products=serialize($products);
-        $order->user_id=15;
+        $order->user_id=Auth()->user()->id;
     $order->save();
         if($data['paymentIntent']['status']==='succeeded'){
             Cart::destroy();
