@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use DB;
 use Illuminate\Http\Request;
+use App\User_product;
+use App\Prod;
 
 class NotifController extends Controller
 {
@@ -11,11 +13,18 @@ class NotifController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function test( Request $request,$id,$produit)
+    public function list(){
+        $c=Auth()->user()->id;
+        $users=DB::select('select prod_id from user_products where user_id = ?', [$c]);
+        $a=$users[0]->prod_id;
+        $products=DB::select('select * from prods where id = ?', [$c]);
+        dd($products);
+        return view('partenaire.list')->with('products',$products);
+    }
+    public function test(Request $request)
     {
-        dd($produit);
         $success="Le produit a  ete envoye envoyer avec succes";
-        return redirect()->route('cart.index')->with(compact('success'));
+        return redirect()->back()->with(compact('success'));
     }
 
     /**
@@ -81,6 +90,6 @@ class NotifController extends Controller
      */
     public function destroy($id)
     {
-        //
+        
     }
 }

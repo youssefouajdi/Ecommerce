@@ -7,23 +7,25 @@
 function showData(){
  
  var date=document.getElementById("datedebut").value;
- var number1=document.getElementById("qty").value;   
- 
+ var number1=document.getElementById("qty").value;  
  if((date !== "") && (number1 !== "")){
   console.log(number1);
    var date_diff_indays = function(date, date2) {
     const d = new Date(Number(date));
-    d.setDate(date.getDate() + date2);
-     console.log(d);
+    
+console.log(today);
+     
      //console.log( Math.floor((Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) - Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate()) ) /(1000 * 60 * 60 * 24)));
       } 
-      document.getElementById("datefin").value = "2014-02-09";
+      date.val( moment().format('MMM D, YYYY') );
+var today = moment().format('D MMM, YYYY');
       date_diff_indays(date, number1);
     }
    }
     </script>
+    
  @if (session('status'))
-                        <div class="alert alert-success" role="alert">
+                        <div class="alert alert-danger" role="alert">
                             {{ session('status') }}
                         </div>
                     @endif
@@ -56,10 +58,11 @@ function showData(){
                   <div class="py-2 text-uppercase">Fin Reservation</div>
                 </th>
                 <th scope="col" class="border-0 bg-light">
-                  <div class="py-2 text-uppercase">Supprimer</div>
-                </th>
-                <th scope="col" class="border-0 bg-light">
                   <div class="p-2 px-3 text-uppercase">Reservatoion</div>
+                </th>
+                
+                <th scope="col" class="border-0 bg-light">
+                  <div class="py-2 text-uppercase">Supprimer</div>
                 </th>
                 <th scope="col" class="border-0 bg-light">
                   <div class="p-2 px-3 text-uppercase">Etat</div>
@@ -77,10 +80,14 @@ function showData(){
                     </div>
                   </div>
                 </th>
+                
                 <td class="border-0 align-middle"><strong>{{ getPrice($product->subtotal()) }}</strong></td>
+                <form action ="{{ route('notif.test') }}" method="POST">
+                        @csrf
                 <td class="border-0 align-middle" ><strong>
 
                 <select name="qty" id="qty"  data-id="{{ $product->rowId }}" class="custom-select" >
+                
                 <?php 
                 $a=$product->qty; ?>
                     @for($i=1 ; $i<100 ; $i++)
@@ -88,22 +95,16 @@ function showData(){
                     @endfor
                 </select>
                 </strong></td>
-                <td class="border-0 align-middle"><strong>  <input type="date" id="datedebut" name="Datdebut" onchange="showData()"></strong></td>
-                <td class="border-0 align-middle"><strong>  <input type="date" id="datefin" name="Datfin" disabled></strong></td>
                 
+                    <td class="border-0 align-middle"><strong>  <input type="date" id="datedebut" name="Datdebut" onchange="showData()"></strong></td>
+                    <td class="border-0 align-middle"><strong>  <input type="date" id="datefin" name="Datfin" disabled></strong></td>
+                    <td class="border-0 align-middle"><button type="submit" class="text-dark"><span>Envoyez</span></td>
+                </form>
                 <td class="border-0 align-middle">
                     <form action ="{{ route('cart.destroy', $product->rowId )}}" method="POST">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="text-dark"><i class="fa fa-trash"></i></a>
-                    </form>
-                </td>
-                <td class="border-0 align-middle">
-                    <form action ="{{ route('notif.index', 
-                        ['id'=>Auth::user()->id,
-                        'prod'=>$product->model->title])}}" method="POST">
-                        @csrf
-                        <button type="submit" class="text-dark"><span>Envoyez</span>
                     </form>
                 </td>
                 <td class="border-0 align-middle"><strong>NOT OK</strong></td>
@@ -112,7 +113,6 @@ function showData(){
             </tbody>
           </table>
         </div>
-        <!-- End -->
       </div>
     </div>
 

@@ -313,7 +313,7 @@ input#img-6:checked ~ .nav-dots label#img-dot-6 {
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
-                                <a href="{{ route('notif.index',10) }}">
+                                <a href="{{ route('notif.list') }}">
                                     <span class="glyphicon glyphicon-globe"></span> notifications <span class="badge">5</span>
                                 </a>
                                 
@@ -428,8 +428,11 @@ input#img-6:checked ~ .nav-dots label#img-dot-6 {
       <label for="img-6" class="nav-dot" id="img-dot-6"></label>
     </li>
 </ul>
-  
-  <button type="button"  onclick="window.location='{{ route('partenaire.annonce') }}'" class="btn btn-secondary btn-lg btn-block">Vous etes Fournisseur Ajouter Votre Produit Ici</button><br><br>
+  @if( Request::is('annonce') )
+  <button type="button"  onclick="window.location='{{ route('annonce.list') }}'" class="btn btn-secondary btn-lg btn-block">Consultez votre liste de produit</button><br><br>
+  @else
+    <button type="button"  onclick="window.location='{{ route('partenaire.annonce') }}'" class="btn btn-secondary btn-lg btn-block">Vous etes Fournisseur Ajouter Votre Produit Ici</button><br><br>
+  @endif
   @if(request()->input('q'))
     <h6> {{ $products->total() }} resultat(s) pour la recherche "{{ request()->q }}" </h6>
   @endif
