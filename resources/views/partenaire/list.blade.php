@@ -20,8 +20,7 @@
           </form>
         </div>
         <div class="col-auto d-none d-lg-block">
-       
-        <img src="data:image/jpg;charset=utf8;base64,{{base64_encode( $product->image) }}" alt="">
+        <img src= "{{URL::asset('/uploads/ad/'.$product->image)}}" alt="">
         </div>
       </div>
     </div>

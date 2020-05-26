@@ -428,6 +428,7 @@ input#img-6:checked ~ .nav-dots label#img-dot-6 {
       <label for="img-6" class="nav-dot" id="img-dot-6"></label>
     </li>
 </ul>
+<br><br>
   @if( Request::is('annonce') )
   <button type="button"  onclick="window.location='{{ route('annonce.list') }}'" class="btn btn-secondary btn-lg btn-block">Consultez votre liste de produit</button><br><br>
   @else

@@ -5,7 +5,7 @@ use DB;
 use Illuminate\Http\Request;
 use App\User_product;
 use App\Prod;
-
+use App\Auth;
 class NotifController extends Controller
 {
     /**
@@ -22,7 +22,11 @@ class NotifController extends Controller
     }
     public function test(Request $request)
     {
-        $success="Le produit a  ete envoye envoyer avec succes";
+        DB::table('user_commands')->insert([
+            ['user_command' => Auth()->user()->id, 'prod_id' => $request->input('custId')
+            ,'jour'=> $request->input('qty') ,'datedebut'=>$request->input('Datdebut') ]
+        ]);
+        $success="Le produit a ete envoye avec succes";
         return redirect()->back()->with(compact('success'));
     }
 

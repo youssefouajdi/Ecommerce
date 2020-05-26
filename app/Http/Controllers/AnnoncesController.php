@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use DB;
 use Auth;
@@ -10,9 +9,6 @@ use App\User_product;
 use App\Prod;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Session;
-
-
-
 class AnnoncesController extends Controller
 {
     public function index(){

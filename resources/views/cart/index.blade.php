@@ -15,7 +15,6 @@ function showData(){
     
 console.log(today);
      
-     //console.log( Math.floor((Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) - Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate()) ) /(1000 * 60 * 60 * 24)));
       } 
       date.val( moment().format('MMM D, YYYY') );
 var today = moment().format('D MMM, YYYY');
@@ -37,7 +36,7 @@ var today = moment().format('D MMM, YYYY');
 <div class="pb-5">
   <div class="container">
     <div class="row">
-      <div class="col-lg-12 p-2 bg-white rounded shadow-sm mb-5">
+      <div class="col-lg-12 p-3 bg-white rounded shadow-sm mb-5">
         <div class="table-responsive  ">
           <table class="table">
             <thead>
@@ -46,10 +45,10 @@ var today = moment().format('D MMM, YYYY');
                   <div class="p-2 px-3 text-uppercase">Produit</div>
                 </th>
                 <th scope="col" class="border-0 bg-light">
-                  <div class="py-2 text-uppercase">Prix</div>
+                  <div class="py-2 px-3 text-uppercase">Prix</div>
                 </th>
                 <th scope="col" class="border-0 bg-light">
-                  <div class="py-2 text-uppercase">Jour</div>
+                  <div class="py-2 px-3 text-uppercase">Jour</div>
                 </th>
                 <th scope="col" class="border-0 bg-light">
                   <div class="py-2 text-uppercase">Debut Reservation</div>
@@ -58,14 +57,14 @@ var today = moment().format('D MMM, YYYY');
                   <div class="py-2 text-uppercase">Fin Reservation</div>
                 </th>
                 <th scope="col" class="border-0 bg-light">
-                  <div class="p-2 px-3 text-uppercase">Reservatoion</div>
+                  <div class="p-2 px-3 text-uppercase">Reservation</div>
                 </th>
                 
                 <th scope="col" class="border-0 bg-light">
-                  <div class="py-2 text-uppercase">Supprimer</div>
+                  <div class="py-2 text-uppercase">Supp.</div>
                 </th>
                 <th scope="col" class="border-0 bg-light">
-                  <div class="p-2 px-3 text-uppercase">Etat</div>
+                  <div class="p-2  text-uppercase">Etat</div>
                 </th>
               </tr>
             </thead>
@@ -84,6 +83,7 @@ var today = moment().format('D MMM, YYYY');
                 <td class="border-0 align-middle"><strong>{{ getPrice($product->subtotal()) }}</strong></td>
                 <form action ="{{ route('notif.test') }}" method="POST">
                         @csrf
+                        <input type="hidden" id="custId" name="custId" value="{{ $product->id }}">
                 <td class="border-0 align-middle" ><strong>
 
                 <select name="qty" id="qty"  data-id="{{ $product->rowId }}" class="custom-select" >
@@ -104,7 +104,7 @@ var today = moment().format('D MMM, YYYY');
                     <form action ="{{ route('cart.destroy', $product->rowId )}}" method="POST">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="text-dark"><i class="fa fa-trash"></i></a>
+                        <button type="submit" class="text-dark" ><i class="fa fa-trash"></i></a>
                     </form>
                 </td>
                 <td class="border-0 align-middle"><strong>NOT OK</strong></td>
