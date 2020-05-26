@@ -18,7 +18,6 @@ class NotifController extends Controller
         $users=DB::select('select prod_id from user_products where user_id = ?', [$c]);
         $a=$users[0]->prod_id;
         $products=DB::select('select * from prods where id = ?', [$c]);
-        dd($products);
         return view('partenaire.list')->with('products',$products);
     }
     public function test(Request $request)

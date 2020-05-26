@@ -18,11 +18,13 @@ class CreateUserProductsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')
                   ->references('id')
-                  ->on('users');
+                  ->on('users')
+                  ->onDelete('cascade');
             $table->unsignedBigInteger('prod_id');
             $table->foreign('prod_id')
                   ->references('id')
-                  ->on('prods');
+                  ->on('prods')
+                  ->onDelete('cascade');
             $table->boolean('etat')->default(0);
             $table->date('debut_offre');
             $table->date('fin_offre');

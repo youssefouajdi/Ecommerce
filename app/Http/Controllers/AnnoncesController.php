@@ -17,9 +17,7 @@ class AnnoncesController extends Controller
 {
     public function index(){
         $c=Auth()->user()->id;
-        $users=DB::select('select prod_id from user_products where user_id = ?', [$c]);
-        $a=$users[0]->prod_id;
-        $products=DB::select('select * from prods where id = ?', [$c]);
+        $products=DB::select('select p.id ,p.title ,p.slug ,p.subtitle ,p.description ,p.price ,p.image ,p.created_at,p.updated_at from prods p ,user_products u where u.user_id = ? and u.prod_id=p.id', [$c]);
         return view('partenaire.list')->with('products',$products);
     }
     public function ajoutannonce()
@@ -66,7 +64,8 @@ class AnnoncesController extends Controller
     {
         $blog = Prod::findOrFail($id);
         $blog->delete();
-        return redirect('/annonce');
+        $success="Le produit a  ete supprimer avec succes";
+        return redirect('/annonce')->with(compact('success'));
     }
 
     
