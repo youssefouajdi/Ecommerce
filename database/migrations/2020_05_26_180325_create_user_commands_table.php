@@ -25,9 +25,12 @@ class CreateUserCommandsTable extends Migration
                   ->references('id')
                   ->on('prods')
                   ->onDelete('cascade');
-            $table->boolean('etat')->default(0);
+            $table->integer('etat')->default(0);
+            $table->boolean('vue')->default(0);
             $table->integer('jour');
             $table->date('datedebut');
+            $table->string('user_name');
+            $table->string('title_prod');   
             $table->timestamps();
         });
     }

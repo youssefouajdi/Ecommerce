@@ -16,8 +16,10 @@ Auth::routes();
 Route::group(['middleware'=>['auth']],function(){
     Route::get('/panier','CartController@index')->name('cart.index');
     Route::post('/notif','NotifController@test')->name('notif.test');
-    Route::get('/list','AnnoncesController@index')->name('annonce.list');
     Route::get('notif/list','NotifController@list')->name('notif.list');
+    Route::delete('notif/delete/{id}','NotifController@destroy')->name('notif.delete');
+    Route::put('notif/update/{id}','NotifController@edit')->name('notif.update');
+    Route::get('/list','AnnoncesController@index')->name('annonce.list');
     Route::get('/paiement','CheckoutController@index')->name('checkout.index');
     Route::post('/paiement','CheckoutController@store')->name('checkout.store');
     Route::get('/merci', 'CheckoutController@thankyou')->name('checkout.thankyou');

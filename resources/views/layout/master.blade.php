@@ -451,5 +451,6 @@ input#img-6:checked ~ .nav-dots label#img-dot-6 {
   </p>
 </footer>
 @yield('extra-js')
+@yield('extra-test')
 </body>
 </html>

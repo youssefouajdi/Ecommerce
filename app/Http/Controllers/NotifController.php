@@ -17,14 +17,15 @@ class NotifController extends Controller
         $c=Auth()->user()->id;
         $users=DB::select('select prod_id from user_products where user_id = ?', [$c]);
         $a=$users[0]->prod_id;
-        $products=DB::select('select * from prods where id = ?', [$c]);
-        return view('partenaire.list')->with('products',$products);
+        $products=DB::select('select * from user_commands   where prod_id = ?', [$a]);
+        return view('partenaire.notif')->with('products',$products);
     }
     public function test(Request $request)
     {
         DB::table('user_commands')->insert([
             ['user_command' => Auth()->user()->id, 'prod_id' => $request->input('custId')
-            ,'jour'=> $request->input('qty') ,'datedebut'=>$request->input('Datdebut') ]
+            ,'jour'=> $request->input('qty') ,'datedebut'=>$request->input('Datdebut'),
+            'user_name'=>Auth()->user()->name ,'title_prod'=> $request->input('titleprod'),'created_at'=>date("Y-m-d h:i:sa")]
         ]);
         $success="Le produit a ete envoye avec succes";
         return redirect()->back()->with(compact('success'));
@@ -70,7 +71,9 @@ class NotifController extends Controller
      */
     public function edit($id)
     {
-        //
+        DB::update('update user_commands set etat = ? where id = ?',[1,$id]);
+        $error="Vous avez refusez le roduit pour qu il soit reserver";
+        return redirect()->back()->with(compact('error'));
     }
 
     /**
@@ -93,6 +96,8 @@ class NotifController extends Controller
      */
     public function destroy($id)
     {
-        
+        DB::update('update user_commands set etat = ? where id = ?',[2,$id]);
+        $success="Vous avez accepter le produit pour qu il soit reserver";
+        return redirect()->back()->with(compact('success'));
     }
 }

@@ -3,26 +3,37 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 <script>
-
 function showData(){
- 
  var date=document.getElementById("datedebut").value;
- var number1=document.getElementById("qty").value;  
+ var number1=document.getElementById("qty").options[document.getElementById("qty").selectedIndex].value;   
  if((date !== "") && (number1 !== "")){
   console.log(number1);
-   var date_diff_indays = function(date, date2) {
-    const d = new Date(Number(date));
-    
-console.log(today);
-     
-      } 
-      date.val( moment().format('MMM D, YYYY') );
-var today = moment().format('D MMM, YYYY');
-      date_diff_indays(date, number1);
+  var someDate = new Date(date);
+  console.log(parseInt(someDate.getDate()) + parseInt(number1))
+  someDate.setDate(parseInt(someDate.getDate()) + parseInt(number1));
+  var dd = someDate.getDate();
+  var mm = someDate.getMonth() + 1;
+  var y = someDate.getFullYear();
+  console.log(dd+"-" + mm + "-" + y);
+  var currentMonth;
+  var currentDay;
+  if (mm < 10){
+    currentMonth = '0' + mm; 
+  }
+  else{
+    currentMonth = mm;
+  }
+  if (dd < 10){
+    currentDay = '0' + dd; 
+  }
+  else{
+    currentDay = dd;
+  }
+  var someFormattedDate = y + '-'+ currentMonth + '-'+ currentDay;
+  document.getElementById("datefin").value = someFormattedDate;
     }
    }
     </script>
-    
  @if (session('status'))
                         <div class="alert alert-danger" role="alert">
                             {{ session('status') }}
@@ -79,11 +90,11 @@ var today = moment().format('D MMM, YYYY');
                     </div>
                   </div>
                 </th>
-                
                 <td class="border-0 align-middle"><strong>{{ getPrice($product->subtotal()) }}</strong></td>
                 <form action ="{{ route('notif.test') }}" method="POST">
                         @csrf
                         <input type="hidden" id="custId" name="custId" value="{{ $product->id }}">
+                        <input type="hidden" id="titleprod" name="titleprod" value="{{ $product->model->title}}">
                 <td class="border-0 align-middle" ><strong>
 
                 <select name="qty" id="qty"  data-id="{{ $product->rowId }}" class="custom-select" >
@@ -107,7 +118,10 @@ var today = moment().format('D MMM, YYYY');
                         <button type="submit" class="text-dark" ><i class="fa fa-trash"></i></a>
                     </form>
                 </td>
-                <td class="border-0 align-middle"><strong>NOT OK</strong></td>
+                <td class="border-0 align-middle" id="buttonID">
+                
+
+                </td>
               </tr>
              @endforeach
             </tbody>
@@ -120,7 +134,7 @@ var today = moment().format('D MMM, YYYY');
       <div class="col-lg-6">
         <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">code Coupon</div>
         <div class="p-4">
-          <p class="font-italic mb-4">If you have a coupon code, please enter it in the box below</p>
+          <p class="font-italic mb-4">Code coupon</p>
           <div class="input-group mb-4 border rounded-pill p-2">
             <input type="text" placeholder="Appliquer Coupon" aria-describedby="button-addon4" class="form-control border-0">
             <div class="input-group-append border-0">
@@ -193,3 +207,21 @@ let element = document.getElementById("qty");
 
     </script>
 @endsection
+@section('extra-test')
+<script src="jquery-3.5.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$('#buttonID').click(function(e) {  
+        e.preventDefault();
+        var param1 = $(this).data("param1")
+        var param2 = $(this).data("param2")
+        $.ajax({
+           url: "/routeNames",
+           type: "GET"/"POST",
+           data: { data1: param1, data2: param2 }, 
+           success: function(response) {
+           console.log(response);  
+    }
+   });
+});
+</script>
