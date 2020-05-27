@@ -15,7 +15,7 @@
           <div class="mb-1 text-muted">{{ $product->created_at}}</div>
           <p class="mb-auto">{{ $product->subtitle }}</p>
           <strong class="mb-auto">{{ $product->getPrice() }} /Jour</strong>
-          <a href="{{ route('show',$product->slug) }}" class="stretched-link">Plus de detail...</a>
+          <a href="{{ route('show',['product'=>$product->slug] ) }}" class="stretched-link">Plus de detail...</a>
         </div>
         <div class="col-auto d-none d-lg-block">
         <img src="{{ $product->image }}" alt="">

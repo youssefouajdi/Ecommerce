@@ -11,6 +11,7 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Session;
 class AnnoncesController extends Controller
 {
+    
     public function index(){
         $c=Auth()->user()->id;
         $products=DB::select('select p.id ,p.title ,p.slug ,p.subtitle ,p.description ,p.price ,p.image ,p.created_at,p.updated_at from prods p ,user_products u where u.user_id = ? and u.prod_id=p.id', [$c]);

@@ -217,11 +217,11 @@ $('#buttonID').click(function(e) {
         var param2 = $(this).data("param2")
         $.ajax({
            url: "/routeNames",
-           type: "GET"/"POST",
+           type: "GET",
            data: { data1: param1, data2: param2 }, 
            success: function(response) {
            console.log(response);  
-    }
+        }
    });
 });
 </script>

@@ -26,7 +26,9 @@ Route::group(['middleware'=>['auth']],function(){
     Route::get('/annonce','AnnoncesController@ajoutannonce')->name('partenaire.annonce');
     Route::post('/annonce/create','AnnoncesController@store')->name('partenaire.store');
     Route::delete('/delete/{id}', 'AnnoncesController@destroy')->name('partenaire.delete');
+    
 });
+Route::post('/comments/{product}','CommentController@store')->name('comments.store');
 Route::get('/home', 'HomeController@index')->name('home');
 
 

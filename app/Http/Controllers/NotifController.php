@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\User_product;
 use App\Prod;
 use App\Auth;
+use Carbon\Carbon;
 class NotifController extends Controller
 {
     /**
@@ -14,10 +15,9 @@ class NotifController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function list(){
-        $c=Auth()->user()->id;
-        $users=DB::select('select prod_id from user_products where user_id = ?', [$c]);
-        $a=$users[0]->prod_id;
-        $products=DB::select('select * from user_commands   where prod_id = ?', [$a]);
+        $products=DB::select('select * from user_commands  where prod_id IN ( 
+            select prod_id from user_products where user_id = '.Auth()->user()->id.')');
+           
         return view('partenaire.notif')->with('products',$products);
     }
     public function test(Request $request)
@@ -25,7 +25,7 @@ class NotifController extends Controller
         DB::table('user_commands')->insert([
             ['user_command' => Auth()->user()->id, 'prod_id' => $request->input('custId')
             ,'jour'=> $request->input('qty') ,'datedebut'=>$request->input('Datdebut'),
-            'user_name'=>Auth()->user()->name ,'title_prod'=> $request->input('titleprod'),'created_at'=>date("Y-m-d h:i:sa")]
+            'user_name'=>Auth()->user()->name ,'title_prod'=> $request->input('titleprod'),'created_at'=>Carbon::now()->toDateTimeString()]
         ]);
         $success="Le produit a ete envoye avec succes";
         return redirect()->back()->with(compact('success'));
@@ -72,8 +72,8 @@ class NotifController extends Controller
     public function edit($id)
     {
         DB::update('update user_commands set etat = ? where id = ?',[1,$id]);
-        $error="Vous avez refusez le roduit pour qu il soit reserver";
-        return redirect()->back()->with(compact('error'));
+        $success="Vous avez accepter le produit pour qu il soit reserver";
+        return redirect()->back()->with(compact('success'));
     }
 
     /**
@@ -97,7 +97,14 @@ class NotifController extends Controller
     public function destroy($id)
     {
         DB::update('update user_commands set etat = ? where id = ?',[2,$id]);
-        $success="Vous avez accepter le produit pour qu il soit reserver";
-        return redirect()->back()->with(compact('success'));
+        $error="Vous avez refusez le produit pour qu il soit reserver ";
+        return redirect()->back()->with(compact('error'));
+    }
+    public static function count()
+    {
+       
+        $products=DB::select('select count(id) from user_commands  where prod_id IN ( 
+            select prod_id from user_products where user_id = '.Auth()->user()->id.')');
+            //return view('layout.master')->with('products',$products);
     }
 }

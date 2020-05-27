@@ -10,9 +10,6 @@
     @yield('extra-meta')
     <title>Acceuil</title>
     @yield('extra-script')
-    
-    
-
     <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/blog/">
     <link rel ="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -314,7 +311,10 @@ input#img-6:checked ~ .nav-dots label#img-dot-6 {
                             </li>
                             <li class="nav-item dropdown">
                                 <a href="{{ route('notif.list') }}">
-                                    <span class="glyphicon glyphicon-globe"></span> notifications <span class="badge">5</span>
+                                    <span class="glyphicon glyphicon-globe"></span> notifications <span class="badge">
+                                    {{ \App\Http\Controllers\NotifController::count() }}
+                                    
+                                    </span>
                                 </a>
                                 
                             </li>
