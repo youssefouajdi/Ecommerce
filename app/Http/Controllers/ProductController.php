@@ -4,10 +4,15 @@ namespace App\Http\Controllers;
 use App\Prod;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\DatabaseNotification;
 
 class ProductController extends Controller
 {
-    
+    public function showFromNotification(Prod $product,DatabaseNotification $notification )
+    {
+        $notification->markAsRead();
+        return view('show',compact('product'));
+    }
     public function index(){
         if(request()->categorie){
             $products=Prod::with('categories')->whereHas('categories',function

@@ -24,8 +24,9 @@ class CommentController extends Controller
         $comment->user_id= auth()->user()->id;
         $product->comments()->save($comment);
         $users = DB::select('select user_id from user_products where prod_id = ?', [$product->id]);
+        
         $user = DB::select('select name from users where id = ?', [$users[0]->user_id]);
-        $user->notify(new NewCommentPosted($product,auth()->user()));
+        auth()->user()->notify(new NewCommentPosted($product,auth()->user()));
         return redirect()->route('show',['product'=>$product->slug] );
     }
 }

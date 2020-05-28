@@ -292,6 +292,20 @@ input#img-6:checked ~ .nav-dots label#img-dot-6 {
                                 </li>
                             @endif
                         @else
+                          @unless(auth()->user()->unreadNotifications->isEmpty())
+                          <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    {{ auth()->user()->unreadNotifications->count() }} notificaton(s)<span class="caret"></span>
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    @foreach(auth()->user()->unreadNotifications as $notification)
+                                    <a href="{{ route('topics.showFromNotification',['product'=>$notification->data['ProductId'],'notification'=>$notification->id]) }}" class="dropdown-item">{{  $notification->data['name'] }} a poste un commentaire sur <strong>{{  $notification->data['ProductTitle'] }}</strong></a>
+                                    @endforeach
+                                </div>
+                            </li>
+
+                          @endunless
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>
@@ -309,15 +323,7 @@ input#img-6:checked ~ .nav-dots label#img-dot-6 {
                                     </form>
                                 </div>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a href="{{ route('notif.list') }}">
-                                    <span class="glyphicon glyphicon-globe"></span> notifications <span class="badge">
-                                    {{ \App\Http\Controllers\NotifController::count() }}
-                                    
-                                    </span>
-                                </a>
-                                
-                            </li>
+                            
                         @endguest
                     </ul>
       </div>

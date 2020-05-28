@@ -119,10 +119,13 @@ function showData(){
                     </form>
                 </td>
                 <td class="border-0 align-middle" id="buttonID">
-                <form action ="{{ route('etat', $product->rowId )}}" method="POST">
+                 <form action ="{{ route('cart.destroy', $product->rowId )}}" method="POST">
                         @csrf
+                        @method('DELETE')
                         <button type="submit" class="text-dark" ><i class="fa fa-trash"></i></a>
                     </form>
+                
+
                 </td>
               </tr>
              @endforeach

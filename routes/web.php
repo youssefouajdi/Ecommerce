@@ -26,10 +26,7 @@ Route::group(['middleware'=>['auth']],function(){
     Route::get('/annonce','AnnoncesController@ajoutannonce')->name('partenaire.annonce');
     Route::post('/annonce/create','AnnoncesController@store')->name('partenaire.store');
     Route::delete('/delete/{id}', 'AnnoncesController@destroy')->name('partenaire.delete');
-    Route::get('/etat',function()
-    {
-        return 'Hello World';
-    })->name('etat');
+    Route::get('showFromNotification/{product}/{notification}','ProductController@showFromNotification')->name('topics.showFromNotification');
     
 });
 Route::post('/comments/{product}','CommentController@store')->name('comments.store');
