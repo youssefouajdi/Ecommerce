@@ -19,7 +19,8 @@ class ProductsTableSeeder extends Seeder
                 'subtitle'=>$faker->sentence(5),
                 'description'=>$faker->text,
                 'price'=>$faker->numberBetween(15,3000)*100,
-                'image'=>'https://via.placeholder.com/250'
+                'image'=>'https://via.placeholder.com/250',
+                'note' =>$faker->randomFloat($nbMaxDecimals = 1, $min = 0, $max = 10)
                 ])->categories()->attach([
                     rand(1,7),
                     rand(1,4)

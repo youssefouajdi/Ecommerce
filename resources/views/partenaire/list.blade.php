@@ -18,6 +18,12 @@
           @method('delete')
               <button class="btn btn-danger">Supprimer l annonce</a></button>
           </form>
+          <br>
+          <form action="{{ route('annonce.update',[ 'id' => $product->id ] ) }}" method="POST">
+          @csrf
+          @method('put')
+              <button class="btn btn-warning">Rendre l annonce premium</a></button>
+          </form>
         </div>
         <div class="col-auto d-none d-lg-block">
         <img src= "{{URL::asset('/uploads/ad/'.$product->image)}}" alt="">

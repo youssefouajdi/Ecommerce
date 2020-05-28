@@ -77,6 +77,10 @@ function showData(){
                 <th scope="col" class="border-0 bg-light">
                   <div class="p-2  text-uppercase">Etat</div>
                 </th>
+                </th>
+                <th scope="col" class="border-0 bg-light">
+                <div class="p-2  text-uppercase">Noter</div>
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -107,7 +111,7 @@ function showData(){
                 </select>
                 </strong></td>
                 
-                    <td class="border-0 align-middle"><strong>  <input type="date" id="datedebut" name="Datdebut" onchange="showData()"></strong></td>
+                    <td class="border-0 align-middle"><strong>  <input type="date" id="datedebut" name="Datdebut" onchange="showData()" required></strong></td>
                     <td class="border-0 align-middle"><strong>  <input type="date" id="datefin" name="Datfin" disabled></strong></td>
                     <td class="border-0 align-middle"><button type="submit" class="text-dark"><span>Envoyez</span></td>
                 </form>
@@ -118,16 +122,32 @@ function showData(){
                         <button type="submit" class="text-dark" ><i class="fa fa-trash"></i></a>
                     </form>
                 </td>
-                <td class="border-0 align-middle" id="buttonID">
-                 <form action ="{{ route('cart.destroy', $product->rowId )}}" method="POST">
+                <td class="border-0 align-middle" id="buttonID"> 
+                <?php
+                $a=DB::select('select etat from user_commands where title_prod = ? ', [$product->model->title]);
+                if(empty($a[0])){
+                  echo "pas encore valider";
+                }else{
+                  if($a[0]->etat==0){
+                    echo "en cours de traitement";
+                }
+                if($a[0]->etat==1){
+                  echo "Accepter ";
+              }
+              if($a[0]->etat==2){
+                echo "n est pas accepter";
+            }
+                } ;
+                ?>
+                 </td>
+                 <td>
+                    <form action ="{{ route('cart.sendmail',$product->id)}}" method="GET">
                         @csrf
-                        @method('DELETE')
-                        <button type="submit" class="text-dark" ><i class="fa fa-trash"></i></a>
+                        <button type="submit" class="text-dark" >Noter produit</a>
                     </form>
-                
-
                 </td>
               </tr>
+
              @endforeach
             </tbody>
           </table>
@@ -138,20 +158,24 @@ function showData(){
     <div class="row py-5 p-4 bg-white rounded shadow-sm">
       <div class="col-lg-6">
         <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">code Coupon</div>
+        @if(!request()>session()->has('coupon'))
         <div class="p-4">
           <p class="font-italic mb-4">Code coupon</p>
+          <form action="{{ route('cart.store.coupon') }}" method="POST">
+          @csrf
           <div class="input-group mb-4 border rounded-pill p-2">
-            <input type="text" placeholder="Appliquer Coupon" aria-describedby="button-addon4" class="form-control border-0">
+            <input type="text" placeholder="Appliquer Coupon" aria-describedby="button-addon4" class="form-control border-0" name="code">
             <div class="input-group-append border-0">
-              <button id="button-addon3" type="button" class="btn btn-dark px-4 rounded-pill"><i class="fa fa-gift mr-2"></i>Reduction</button>
+              <button id="button-addon3" type="submit" class="btn btn-dark px-4 rounded-pill"><i class="fa fa-gift mr-2"></i>Reduction</button>
             </div>
           </div>
+          </form>
         </div>
-        <!--<div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Commentaire sur produit</div>
+       @else
         <div class="p-4">
-          <p class="font-italic mb-4">Information supplementaire sur le produit</p>
-          <textarea name="" cols="30" rows="2" class="form-control"></textarea>
-        </div>-->
+        <p class="font-italic mb-4">Coupon deja appliquer</p>
+        </div>
+       @endif
       </div>
       <div class="col-lg-6">
         <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Detail de la commande </div>
@@ -159,7 +183,14 @@ function showData(){
           <p class="font-italic mb-4">Facturation total de votre panier .</p>
           <ul class="list-unstyled mb-4">
             <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Prix</strong><strong>{{ getPrice(Cart::subtotal()) }}</strong></li>
-            <!--<li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Shipping and handling</strong><strong>$10.00</strong></li>-->
+
+            <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Coupon {{ request()->session()->get('coupon')['code'] }}
+            <form action="{{ route('cart.destroy.coupon') }}" method="POST" class="d-inline-block">
+              @csrf
+              @method('DELETE')
+              <button type="submit" class="btn btn-sm-btn-outline-danger"><i class="fa fa-trash"></i></button>
+            </form>
+            </strong><strong>{{ getPrice(request()->session()->get('coupon')['remise']) }}</strong></li>
             <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Tax</strong><strong>{{ getPrice(Cart::tax()) }}</strong></li>
             <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Total</strong>
               <h5 class="font-weight-bold">{{ getPrice(Cart::total()) }}</h5>

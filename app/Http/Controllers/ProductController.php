@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use App\Prod;
+use DB;
+
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
@@ -38,5 +40,14 @@ class ProductController extends Controller
                 ->orWhere('description','like',"%$q%")
                 ->paginate(6);
         return view('search')->with('products',$products);
+    }
+    public function update(Request $request){
+        DB::update('update prods set note = ? where id = ?',[$request->input('note'),$request->input('custId')]);
+        $success="Vous avez notez le produit";
+        return redirect()->back()->with(compact('success'));
+    }
+    public function edit($id){
+        
+            return view('noter')->with('products',$id);
     }
 }

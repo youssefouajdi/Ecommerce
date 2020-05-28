@@ -27,6 +27,7 @@ class NotifController extends Controller
             ,'jour'=> $request->input('qty') ,'datedebut'=>$request->input('Datdebut'),
             'user_name'=>Auth()->user()->name ,'title_prod'=> $request->input('titleprod'),'created_at'=>Carbon::now()->toDateTimeString()]
         ]);
+        
         $success="Le produit a ete envoye avec succes";
         return redirect()->back()->with(compact('success'));
     }

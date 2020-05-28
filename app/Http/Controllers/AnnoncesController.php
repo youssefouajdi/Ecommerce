@@ -64,6 +64,11 @@ class AnnoncesController extends Controller
         $success="Le produit a  ete supprimer avec succes";
         return redirect('/annonce')->with(compact('success'));
     }
+    public function edit($id){
+        DB::update('update user_products set etat = 1 where prod_id = ?',[$id]);
+        $success="Vous avez rendu votre annonce premium";
+        return redirect()->back()->with(compact('success'));
+    }
 
     
 }
